@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teamcity-agent
+  labels:
+    app: teamcity-agent
+spec:
+  selector:
+    matchLabels:
+      app: teamcity-agent
+  template:
+    metadata:
+      labels:
+        app: teamcity-agent
+    spec:
+      containers:
+      - name: teamcity-agent-container
+        image: docker.io/jetbrains/teamcity-agent:latest
+        command:
+        - sh
+        - "-c"
+        - |
+          apt-get update && apt-get install -y gradle && /run-services.sh
+        securityContext:
+          privileged: true
+        env:
+        - name: DOCKER_IN_DOCKER
+          value: start
+        - name: GRADLE_HOME
+          value: /usr/share/gradle
+        - name: SERVER_URL
+          value: http://10.0.88.160:8111
+
