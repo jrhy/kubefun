@@ -24,6 +24,8 @@ spec:
         securityContext:
           privileged: true
         env:
+        - name: AGENT_NAME
+          value: kube
         - name: DOCKER_IN_DOCKER
           value: start
         - name: GRADLE_HOME
