@@ -13,14 +13,22 @@ spec:
       labels:
         app: teamcity-agent
     spec:
+      volumes:
+      - name: agent-data
+        hostPath:
+          path: /teamcity-agent-data
+          type: Directory
       containers:
       - name: teamcity-agent-container
         image: docker.io/jetbrains/teamcity-agent:latest
+        volumeMounts:
+        - name: agent-data
+          mountPath: /data/teamcity_agent
         command:
         - sh
         - "-c"
         - |
-          apt-get update && apt-get install -y gradle && /run-services.sh
+          apt-get update && apt-get install -y unzip libsodium-dev && curl -o /tmp/gradle.zip -L https://services.gradle.org/distributions/gradle-5.3-bin.zip && cd /usr/share && unzip /tmp/gradle.zip && cd / && /run-services.sh
         securityContext:
           privileged: true
         env:
@@ -29,7 +37,7 @@ spec:
         - name: DOCKER_IN_DOCKER
           value: start
         - name: GRADLE_HOME
-          value: /usr/share/gradle
+          value: /usr/share/gradle-5.3
         - name: SERVER_URL
           value: http://10.0.88.160:8111
 
