@@ -7,11 +7,16 @@ metadata:
     app: mariadb
 spec:
   containers:
-  - image: mariadb/server:10.4
+  - image: 10.0.88.166:32000/mariadbfun
     name: mariadb
     env:
-    - name: MARIADB_ALLOW_EMPTY_PASSWORD
-      value: "1"
+    #- name: MARIADB_ALLOW_EMPTY_PASSWORD
+    #  value: "1"
+    - name: MYSQL_ROOT_PASSWORD
+      value: "X2pZdnj2FNqmTPq"
+    - name: MYSQL_DATABASE
+      value: "hello"
+
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
