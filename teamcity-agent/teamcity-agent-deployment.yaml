@@ -28,7 +28,20 @@ spec:
         - sh
         - "-c"
         - |
-          apt-get update && apt-get install -y unzip libsodium-dev && curl -o /tmp/gradle.zip -L https://services.gradle.org/distributions/gradle-5.3-bin.zip && cd /usr/share && unzip /tmp/gradle.zip && cd / && /run-services.sh
+          apt-get update && \
+            apt-get install -y unzip libsodium-dev chromium-browser zip && \
+            curl -o /tmp/gradle.zip -L https://services.gradle.org/distributions/gradle-5.3-bin.zip && \
+            cd /usr/share && \
+            unzip /tmp/gradle.zip && \
+            cd / && \
+            curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl && \
+            ( curl -s "https://get.sdkman.io" | bash ) && \
+            source /root/.sdkman/bin/sdkman-init.sh && \
+            sdkman install kotlin && \
+            sdkman install kscript && \
+            mv kubectl /usr/bin && \
+            chmod a+x /usr/bin/kubectl && \
+            /run-services.sh
         securityContext:
           privileged: true
         env:
