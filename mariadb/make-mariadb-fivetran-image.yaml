@@ -216,15 +216,13 @@ spec:
       !includedir /etc/mysql/conf.d/
       EOF
       cat <<EOF > mariadbfun/fivetran.sql
-      CREATE USER fivetran@'%' IDENTIFIED BY 'replace-me-with-something-better';
+      CREATE USER fivetran@'%' IDENTIFIED BY 'replace-this-password-with-something-better';
       GRANT SELECT, REPLICATION CLIENT, REPLICATION SLAVE ON *.* TO fivetran@'%';
       EOF
       cat <<EOF > mariadbfun/Dockerfile
       FROM mariadb/server:10.4
       COPY "my.cnf" "/etc/mysql/my.cnf"
-      #RUN mkdir /docker-entrypoint-initdb.d
       COPY "fivetran.sql" "/docker-entrypoint-initdb.d/fivetran.sql"
-      RUN apt-get update && apt-get install -y diffutils patch vim less
       EOF
       img build -t 10.0.88.166:32000/mariadbfun mariadbfun/ &&
       img push --insecure-registry 10.0.88.166:32000/mariadbfun
