@@ -28,8 +28,9 @@ spec:
         - sh
         - "-c"
         - |
-          apt-get update && \
-            apt-get install -y unzip libsodium-dev chromium-browser zip && \
+          ( echo '{ "insecure-registries":["myregistry.example.com:5000"] }' > /etc/docker/daemon.json ) && \
+            apt-get update && \
+            apt-get install -y unzip libsodium-dev chromium-browser zip gettext-base python3.7-venv jq && \
             curl -o /tmp/gradle.zip -L https://services.gradle.org/distributions/gradle-5.3-bin.zip && \
             cd /usr/share && \
             unzip /tmp/gradle.zip && \
@@ -41,6 +42,8 @@ spec:
             sdkman install kscript && \
             mv kubectl /usr/bin && \
             chmod a+x /usr/bin/kubectl && \
+            curl -s -L -o /usr/bin/jq "https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64" && \
+            chmod a+x /usr/bin/jq && \
             /run-services.sh
         securityContext:
           privileged: true
